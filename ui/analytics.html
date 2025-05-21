@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Grocery Store Analytics</title>
+  
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f4f6f8;
+      margin: 0;
+      padding: 20px;
+      color: #333;
+    }
+    .container {
+      max-width: 900px;
+      margin: auto;
+      background: #fff;
+      padding: 30px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+      border-radius: 8px;
+    }
+    h1 {
+      text-align: center;
+      color: #2a9d8f;
+    }
+    button {
+      background-color: #2a9d8f;
+      border: none;
+      color: white;
+      padding: 12px 25px;
+      font-size: 16px;
+      margin: 10px 5px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: #21867a;
+    }
+    #report {
+      margin-top: 30px;
+      text-align: center;
+    }
+    #report img {
+      max-width: 100%;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Grocery Store Analytics</h1>
+    <div style="text-align:center">
+      <button onclick="fetchReport('/generate-report')">Sales Report</button>
+      <button onclick="fetchReport('/generate-most-sold-products-report')">Most Sold Products</button>
+    </div>
+    <div id="report">Click a button to load graph.</div>
+  </div>
+ 
+  <script>
+    async function fetchReport(url) {
+      const reportDiv = document.getElementById('report');
+      reportDiv.innerHTML = 'Loading...';
+      try {
+        const response = await fetch('http://127.0.0.1:5000' + url);
+        if (!response.ok) throw new Error('Network response was not OK');
+        const data = await response.json();
+        if (data.image) {
+          reportDiv.innerHTML = `<img src="data:image/png;base64,${data.image}" alt="Report Graph">`;
+        } else {
+          reportDiv.innerHTML = 'Error: No image returned.';
+        }
+      } catch (error) {
+        reportDiv.innerHTML = 'Error fetching report: ' + error.message;
+      }
+    }
+  </script>
+</body>
+</html>
+
+
+
